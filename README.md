@@ -1,8 +1,8 @@
-﻿# Lab 3 â€” NYC Taxi Data Profiling & Cleaning
+# Lab 3 — NYC Taxi Data Profiling & Cleaning
 
 **Course:** INF4058 Data Engineering
 **Dataset:** `yellow_tripdata_2021-01.csv.gz` (1,369,765 rows)
-**Scope:** Look â†’ Profile â†’ Find problems â†’ Decide â†’ Clean â†’ **Stop** (no load into PostgreSQL)
+**Scope:** Look → Profile → Find problems → Decide → Clean → **Stop** (no load into PostgreSQL)
 
 ---
 
@@ -13,26 +13,26 @@
 | `lab3_cleaning.ipynb` | Profiling, problem detection, and the `clean(df)` function |
 | `requirements.txt` | Python dependencies |
 
-> No data files, no `.venv/`, and no keys are tracked in this repository.
+> No data files, no `.venv/`, and no keys are in this repository.
 
 ---
 
 ## Steps followed
 
-1. **Look** â€” Read the first 100 rows; inspected `df.head()` and `df.dtypes` to identify date columns and mostly-empty columns.
-2. **Profile** â€” Read the full file in chunks of **100,000 rows** (never loaded at once, data not modified). Built a per-column table of dtype, null count, null %, min, and max.
-3. **Find problems** â€” Counted:
+1. **Look** — Read the first 100 rows; inspected `df.head()` and `df.dtypes` to identify date columns and mostly-empty columns.
+2. **Profile** — Read the full file in chunks of **100,000 rows** (never loaded at once, data not modified). Built a per-column table of dtype, null count, null %, min, and max.
+3. **Find problems** — Counted:
    - pickups outside January 2021
    - zero or negative `fare_amount`
    - zero or negative `trip_distance`
    - `passenger_count = 0`
    - fully duplicated rows
-4. **Decide** â€” Chose **drop**, **fix**, or **flag** for each problem (see table below).
-5. **Clean** â€” Implemented `clean(df)`, which:
+4. **Decide** — Chose **drop**, **fix**, or **flag** for each problem (see table below).
+5. **Clean** — Implemented `clean(df)`, which:
    - works on a **copy** (original dataframe is never changed)
    - returns `(cleaned_df, {rule: rows_removed})`
-   - never drops rows silently â€” every removal is counted per rule
-6. **Stop** â€” The pipeline ends at cleaning. Loading into PostgreSQL happens next session.
+   - never drops rows silently — every removal is counted per rule
+6. **Stop** — The pipeline ends at cleaning. Loading into PostgreSQL happens next session.
 
 ---
 
@@ -40,15 +40,15 @@
 
 | Problem | Found | Decision | Rows removed | Rows flagged (kept) |
 |---------|------:|----------|-------------:|--------------------:|
-| `passenger_count` is null | 98,352 | Drop | 98,352 | â€“ |
-| Pickup outside Jan 2021 | 24 | Drop | 24 | â€“ |
-| Dropoff before/equal to pickup | 6,557 | Drop | 794 | â€“ |
-| `fare_amount <= 0` | 7,411 | Drop | 7,213 | â€“ |
-| Duplicate rows | 0 | Drop | 0 | â€“ |
+| `passenger_count` is null | 98,352 | Drop | 98,352 | – |
+| Pickup outside Jan 2021 | 24 | Drop | 24 | – |
+| Dropoff before/equal to pickup | 6,557 | Drop | 794 | – |
+| `fare_amount <= 0` | 7,411 | Drop | 7,213 | – |
+| Duplicate rows | 0 | Drop | 0 | – |
 | `trip_distance <= 0` | 19,952 | Flag | 0 | 17,131 |
 | `trip_distance > 100` miles | 55 | Flag | 0 | 17 |
 | `passenger_count = 0` | 26,726 | Flag | 0 | 26,654 |
-| Integer columns read as float | â€“ | Fix (`Int64`) | 0 | â€“ |
+| Integer columns read as float | – | Fix (`Int64`) | 0 | – |
 
 **Rows before:** 1,369,765  **Rows after:** 1,263,382  **Removed:** 106,383
 
