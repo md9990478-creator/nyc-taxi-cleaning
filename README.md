@@ -41,16 +41,17 @@
 
 | Problem | Found | Decision | Rows removed | Rows flagged (kept) |
 |---------|------:|----------|-------------:|--------------------:|
+| `passenger_count` is null | 98,352 | Drop | 98,352 | – |
 | Pickup outside Jan 2021 | 24 | Drop | 24 | – |
-| Dropoff before/equal to pickup | 6,557 | Drop | 6,557 | – |
-| `fare_amount <= 0` | 7,411 | Drop | 7,343 | – |
+| Dropoff before/equal to pickup | 6,557 | Drop | 794 | – |
+| `fare_amount <= 0` | 7,411 | Drop | 7,213 | – |
 | Duplicate rows | 0 | Drop | 0 | – |
-| `trip_distance <= 0` | 19,952 | Flag | 0 | 18,308 |
-| `trip_distance > 100` miles | 55 | Flag | 0 | 55 |
+| `trip_distance <= 0` | 19,952 | Flag | 0 | 17,131 |
+| `trip_distance > 100` miles | 55 | Flag | 0 | 17 |
 | `passenger_count = 0` | 26,726 | Flag | 0 | 26,654 |
-| Null vendor / passenger / payment columns | 98,352 | Fix (Int64) + Flag | 0 | 92,459 |
+| Integer columns read as float | – | Fix (`Int64`) | 0 | – |
 
-**Rows before:** 1,369,765  **Rows after:** 1,355,841  **Removed:** 13,924
+**Rows before:** 1,369,765  **Rows after:** 1,263,382  **Removed:** 106,383
 
 Rules are applied in order, so a row removed by an earlier rule is not counted again by a later one
 (that is why the "Found" and "Removed/Flagged" columns differ).
